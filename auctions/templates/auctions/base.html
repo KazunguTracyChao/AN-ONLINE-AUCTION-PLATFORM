@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}Digital Auction{% endblock %}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="shortcut icon" href="{% static 'auctions/img/favicon.ico' %}" type="image/x-icon" />
+    <link rel="icon" href="{% static 'auctions/img/favicon.ico' %}" type="image/x-icon" />
+
+    <link rel="stylesheet" href="{% static 'auctions/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="{% static 'auctions/css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'auctions/css/style.css' %}" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Satisfy" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Klee+One&display=swap" rel="stylesheet" />
+
+    <script src="{% static 'auctions/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="{% static 'auctions/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Template Main JS File -->
+    <script src="{% static 'auctions/js/main.js' %}"></script>
+
+    {% block head %} {% endblock %}
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <div class="loader"></div>
+    {% block body %} {% endblock %}
+
+    <script>
+        // form is in header.html
+        function submitContactForm() {
+            console.log("in func");
+            statusMsg = document.getElementsByClassName("statusMsg")[0];
+            msg = `
+            <div class="alert alert-success" role="alert">
+                Feedback Submitted!
+            </div>
+            `;
+            statusMsg.innerHTML = msg;
+            form = document.getElementById("feedbackForm");
+            form.reset();
+        }
+    </script>
+</body>
+
+</html>

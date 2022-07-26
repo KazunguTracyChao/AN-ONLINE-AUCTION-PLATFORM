@@ -1,0 +1,40 @@
+{% extends 'auctions/base.html' %}
+
+{% block title %}Closed Listings | {% endblock %}
+
+{% block body %}
+
+{% include 'auctions/header.html' %}
+
+<div class="closed-listings-wrapper bg-img-secondary">
+    <div class="container">
+        <div class="text-center my-4">
+            <h2 class="text-title">Closed Auctions </h2>
+        </div>
+        <div class="text-center mt-5">
+            <div class="row" style="width:100%;">
+                {% for listing in listings %}
+                <div class="col-sm-12 col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <p id="bid">Highest bid: <span class="bid-user">{{ listing.bid.user }}</span> -
+                                <span class="price">${{ listing.bid.bid }}</span>
+                            </p>
+                        </div>
+                        <img class="card-img" src="{{ listing.url }}" alt="Card image" height="300px">
+                        <div class=" card-body text-center">
+                            <h5 class="card-title">{{ listing.title}}</h5>
+                            <p class="card-text">{{ listing.description }}</p>
+                        </div>
+                        <a href="{% url 'display_listing' listing.id %}" class="btn btn-info">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'auctions/footer.html' %}
+
+{% endblock %}

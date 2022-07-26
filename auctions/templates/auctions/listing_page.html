@@ -1,0 +1,184 @@
+{% extends 'auctions/base.html' %} {% block title %}Active Listing | Digital Auction{% endblock %} {% block body %} {% include 'auctions/header.html' %}
+
+<div class="container my-4">
+    <div class="back-link mb-3">
+        <a href="{% url 'display_category' %}" class="text-primary">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i> Ongoing Auctions
+        </a>
+    </div>
+
+    {% if listing.is_closed and user != listing.bid.user %}
+    <div class="alert alert-primary" role="alert">
+        <span class="bid-user">{{ listing.bid.user }}</span>, won the Auction for
+        <span class="price">${{ listing.bid.bid }}!</span>
+    </div>
+    {% endif %} {% if listing.is_closed and user == listing.bid.user %}
+    <div class="alert alert-success" role="alert">
+        Congratulations <span class="bid-user">{{ listing.bid.user }}</span>, you won the Auction!
+    </div>
+    <div>
+        <marquee height="30%">
+            Hey {{ listing.bid.user.first_name }}, Please contact with the owner of the listing for further process. Thank You !
+        </marquee>
+    </div>
+    {% endif %} {% if is_owner and not listing.is_closed%}
+    <a class="btn btn-danger float-right" id="close-auction" href="{% url 'close_auction' listing.id%}">
+    Close Auction
+  </a> {% endif %}
+
+    <div class="container">
+        {% if message %} {% if updated %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% else %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endif %} {% endif %}
+
+        <div class="text-center">
+            <div class="badge badge-pill badge-primary">{{ listing.category }}</div>
+            <h1>{{listing.title }}</h1>
+            {% if listing.is_closed and user == listing.bid.user %}
+            <div class="owner-info mb-3">
+                <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#ownerInfoModal">
+          Show Owner Info
+        </button>
+            </div>
+            {% endif %}
+            <div class="listing-img">
+                <img src="{{ listing.url }}" class="img-fluid" alt="Listing picture" />
+            </div>
+            <br />
+            <p>{{ listing.description }}</p>
+            <p id="bid">
+                Current bid: <span class="bid-user">{{ listing.bid.user }}</span> -
+                <span class="price">${{ listing.bid.bid }}</span>
+            </p>
+            {% if user.is_authenticated %} {% if is_listing_in_watchlist%}
+            <a class="btn btn-danger" href="{% url 'remove_watchlist' listing.id %}">
+        Remove from watchlist
+      </a> {% else %}
+            <a class="btn btn-success" href="{% url 'add_watchlist' listing.id %}">
+        Add to watchlist
+      </a> {% endif %} {% endif %}
+        </div>
+
+        <!-- Modal OwnerInfo -->
+        <div class="modal fade" id="ownerInfoModal" tabindex="-1" role="dialog" aria-labelledby="ownerInfoModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-bolder" id="ownerInfoModalTitle">
+                            Listing's Owner Information
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row font-weight-bold">
+                            <div class="col-md-6">
+                                <span>Username: </span>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-primary">{{ listing.owner }}</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row font-weight-bold">
+                            <div class="col-md-6">
+                                <span>Phone: </span>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-primary">{{ listing.owner.phone }} </span>
+                                <a id="clipboardIcon" href="#" class="js-textareacopybtn" data-toggle="tooltip" data-placement="top" title="Copied To Clipboard" data-trigger="manual"><i class="fa fa-clipboard"></i
+                ></a>
+                                <textarea class="js-copytextarea d-none">
+{{ listing.owner.phone }}</textarea
+                >
+              </div>
+            </div>
+            <hr />
+            <div class="row font-weight-bold">
+              <div class="col-md-6">
+                <span>Email: </span>
+              </div>
+              <div class="col-md-6">
+                <span class="text-primary">
+                  <a href="mailto:{{ listing.owner.email }}"
+                    >{{ listing.owner.email }}</a
+                  >
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if user.is_authenticated and not listing.is_closed%}
+    <form
+      action="{% url 'new_bid' listing.id%}"
+      method="post"
+      class="text-center mt-4"
+    >
+      {% csrf_token %}
+      <!-- <label class="font-weight-bold">New Bid:</label> -->
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <div class="row">
+            <div class="col-lg-6 ml-auto p-0 px-lg-3">
+              <input
+                type="text"
+                name="bid"
+                class="form-control border-dark"
+                id="exampleFormControlInput1"
+                style="width: 100%"
+              />
+            </div>
+            <div class="col-lg-2 mt-3 mt-lg-0 mr-auto p-0">
+              <button
+                id="bid-button"
+                class="btn btn-outline-primary m-0 w-100"
+                type="submit"
+              >
+                Place new bid
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+{% include 'auctions/footer.html' %}
+
+<script>
+  var copyTextareaBtn = document.querySelector(".js-textareacopybtn");
+
+  copyTextareaBtn.addEventListener("click", function (event) {
+    var copyTextarea = document.querySelector(".js-copytextarea");
+    copyTextarea.focus();
+    copyTextarea.select();
+
+    try {
+      navigator.clipboard.writeText(copyTextarea.value);
+      $("#clipboardIcon").tooltip("show");
+      setTimeout(() => {
+        $("#clipboardIcon").tooltip("hide");
+      }, 3000);
+    } catch (err) {
+      console.log("Oops, unable to copy");
+    }
+  });
+</script>
+{% endblock %}

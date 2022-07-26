@@ -1,0 +1,46 @@
+{% extends 'auctions/base.html' %} {% block title %}Login | Digital Auction{% endblock %} {% block body %}
+
+<section id="login-sec">
+    <div class="login-wrapper">
+        <div class="row">
+            <div class="col-lg-6 d-none d-lg-block mx-auto login-img"></div>
+
+            <div class="col-lg-5 mx-auto">
+                <div class="card card-signin flex-row my-5">
+                    <div class="card-body">
+                        <a class="w3-xlarge" href="{% url 'index' %}"><i class="fa fa-home"></i
+            ></a>
+                        <h5 class="card-title text-center mb-0">Login Form</h5>
+                        <p>{{message}}</p>
+                        <hr style="
+                height: 1px;
+                border-width: 0;
+                color: rgb(0, 0, 0);
+                background-color: rgb(8, 0, 0);
+              " />
+                        <form class="form-signin" method="POST">
+                            {% csrf_token %}
+                            <div class="form-label-group">
+                                <input type="text" name="username" id="inputUserame" class="form-control" placeholder="Username" required autofocus />
+                                <label for="inputUserame">Username</label>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required />
+                                <label for="inputPassword">Password</label>
+                            </div>
+                            <a class="d-block mb-2 ml-4" href="{% url 'reset_password' %}">Forgot Password?</a
+              >
+              <button class="btn btn-lg btn-primary btn-block" type="submit">
+                LOGIN
+              </button>
+              <a class="d-block text-center mt-3" href="{% url 'register' %}"
+                >Don't have an account? Register</a
+              >
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'auctions/base.html' %}
+
+{% block body %}
+
+{% include 'auctions/header.html' %}
+
+<div class="search-wrapper bg-img-secondary">
+    <div class="container mt-4">
+        <div class="back-link mb-3">
+            <a href="{% url 'index' %}" class="text-primary">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i> Go to Home
+            </a>
+        </div>
+        <div class="mb-5">
+            <div class="text-center">
+                <h2 class="text-title">Search Results</h2>
+            </div>
+        </div>
+        {% if not object_list %}
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="error text-center">
+                    <div class="alert alert-danger" role="alert">
+                        No Result Found!
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="text-center">
+            <div class="row" style="width:100%;">
+                {% for listing in object_list %}
+                <div class="col-sm-12 col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <p id="bid">Current bid: <span class="bid-user">{{ listing.bid.user }}</span> -
+                                <span class="price">${{ listing.bid.bid }}</span>
+                            </p>
+                        </div>
+                        <img class="card-img" src="{{ listing.url }}" alt="Card image" height="300">
+                        <div class=" card-body text-center">
+                            <h5 class="card-title">{{ listing.title}}</h5>
+                            <p class="card-text">{{ listing.description }}</p>
+                        </div>
+                        <a href="{% url 'display_listing' listing.id %}" class="btn btn-info">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'auctions/footer.html' %}
+
+{% endblock %}

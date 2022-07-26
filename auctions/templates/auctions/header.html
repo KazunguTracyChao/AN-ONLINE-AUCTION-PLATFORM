@@ -1,0 +1,161 @@
+{% load static %}
+
+<header id="header">
+    <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+        <div class="navbar navbar-light">
+            <img src="{% static 'auctions/img/auction.jpeg' %}" class="d-inline-block align-top" alt="logo" />
+            <strong class="title ml-2">Digital Auction </strong>
+        </div>
+        <!-- 'Satisfy', serif -->
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <form class="form-inline my-2 my-lg-0 ml-auto" action="{% url 'search_results' %}" method="GET">
+                <input name="q" type="text" class="fa fa-search form-control empty" id="iconified" placeholder="&#xF002;  Auction Search" />
+                <button class="btn btn-outline-success my-2 my-sm-0 mx-auto ml-md-2 nav-form-btn" type="submit">
+          Search
+        </button>
+            </form>
+            <ul class="navbar-nav ml-auto" style="font-size: 18px">
+                {% url 'index' as url %}
+                <li class="nav-item {% if request.path == url %}active{% endif %}">
+                    <a class="nav-link" href="{{ url }}">Home </a>
+                </li>
+                {% url 'about' as url %}
+                <li class="nav-item {% if request.path == url %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'about' %}">About</a>
+                </li>
+                {% url 'create_listing' as url1 %} {% url 'display_category' as url2 %} {% url 'closed_listings' as url3 %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.path == url1 or request.path == url2 or request.path == url3 %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Auctions
+          </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'create_listing' %}">Create Listing</a
+            >
+            <a class="dropdown-item" href="{% url 'display_category' %}"
+              >Ongoing Auctions</a
+            >
+            <a class="dropdown-item" href="{% url 'closed_listings' %}"
+              >Closed Auctions</a
+            >
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'terms' %}"
+              >Terms & Conditions</a
+            >
+            <a
+              class="dropdown-item"
+              href="#"
+              data-toggle="modal"
+              data-target="#feedbackModal"
+              >Feedback Form</a
+            >
+          </div>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            {{user.username}}
+          </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                            <a class="dropdown-item" href="{% url 'display_watchlist' %}">Watchlist</a
+            >
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                </li>
+                {% else %} {% url 'register' as url %}
+                <li class="nav-item {% if request.path == url %}active{% endif %}">
+                    <a class="nav-link" aria-current="page" href="{% url 'register' %}">Signup</a
+          >
+        </li>
+        {% url 'login' as url %}
+        <li class="nav-item {% if request.path == url %}active{% endif %}">
+          <a class="nav-link" aria-current="page" href="{% url 'login' %}"
+            >Login</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<!-- Feedback Modal -->
+<div
+  class="modal fade"
+  id="feedbackModal"
+  role="dialog"
+  aria-labelledby="feedbackModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title mx-auto" id="feedbackModalTitle">
+          Feedback Form
+        </h4>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <p class="statusMsg"></p>
+        <form role="form" id="feedbackForm">
+          <div class="form-group">
+            <label for="inputName">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputName"
+              placeholder="Enter your name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="inputEmail">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="inputEmail"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="inputMessage">Message</label>
+            <textarea
+              class="form-control"
+              id="inputMessage"
+              placeholder="Enter your message"
+            ></textarea>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary submitBtn"
+          onclick="submitContactForm()"
+        >
+          SUBMIT
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

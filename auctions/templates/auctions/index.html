@@ -1,0 +1,50 @@
+{% extends 'auctions/base.html' %} {% block body %} {% include 'auctions/header.html' %}
+
+<section id="hero-section">
+    <div class="hero-container">
+        <h1 style="
+        color: #fff;
+        text-shadow: 0 0 10px #fff, 0 0 40px #0ff, 0 0 80px #0ff, 0 0 90px #0ff,
+          0 0 100px #0ff, 0 0 150px #0ff;
+      ">
+            Digital Auction
+        </h1>
+        <h2 style="color: white">
+            A secure, transparent platform for conducting Electronic Auctions
+        </h2>
+        <a href="#active-listing-sec" class="btn-scroll" title="Scroll Down"><i class="fa fa-caret-down" aria-hidden="true"></i
+    ></a>
+    </div>
+</section>
+
+<section id="active-listing-sec" class="mt-5">
+    <div class="section-title">
+        <span>Ongoing Auctions</span>
+        <h2>Ongoing Auctions</h2>
+        <!-- <p>Makaveli in this kIlluminati</p> -->
+    </div>
+    <div class="container mt-5">
+        <div class="row">
+            {% for listing in listings %}
+            <div class="col-md-6 col-lg-5 mb-5">
+                <div class="card">
+                    <img class="card-img-top" src="{{listing.url}}" alt="Card image cap" />
+                    <div class="card-body">
+                        <h5 class="card-title">{{listing.title}}</h5>
+                        <p class="card-text">{{listing.description}}</p>
+                        <a href="{% url 'display_listing' listing.pk %}" class="btn btn-primary">View Details</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <a
+        class="view-more-link mt-auto mb-5 mx-auto"
+        href="{% url 'display_category' %}"
+        >View more...</a
+      >
+    </div>
+  </div>
+</section>
+
+{% include 'auctions/footer.html' %} {% endblock %}
